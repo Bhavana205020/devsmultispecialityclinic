@@ -1,26 +1,47 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { TopBar } from "@/components/site/TopBar";
+import { Header } from "@/components/site/Header";
+import { Hero } from "@/components/site/Hero";
+import { Services } from "@/components/site/Services";
+import { Doctors } from "@/components/site/Doctors";
+import { WhyChooseUs } from "@/components/site/WhyChooseUs";
+import { AppointmentForm } from "@/components/site/AppointmentForm";
+import { Testimonials } from "@/components/site/Testimonials";
+import { ContactFooter } from "@/components/site/ContactFooter";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Dev's Multispeciality Clinic — Complete Care Under One Roof | Kondapur, Hyderabad" },
+      {
+        name: "description",
+        content:
+          "Consultation, Orthopaedic, Gastroenterology, Physiotherapy, Pharmacy, Diagnostics & Digital X-ray at Dev's Multispeciality Clinic, Kondapur, Hyderabad. Book your appointment online.",
+      },
+      { property: "og:title", content: "Dev's Multispeciality Clinic — Complete Care Under One Roof" },
+      {
+        property: "og:description",
+        content: "Expert doctors, advanced facilities and minimal waiting time. Book online.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <TopBar />
+      <Header />
+      <main>
+        <Hero />
+        <Services />
+        <Doctors />
+        <WhyChooseUs />
+        <AppointmentForm />
+        <Testimonials />
+        <ContactFooter />
+      </main>
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
