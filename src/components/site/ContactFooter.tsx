@@ -45,12 +45,19 @@ export function ContactFooter() {
       </section>
 
       <footer className="bg-brand text-brand-foreground pt-12 pb-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-10">
+          <h2 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">
+            <span className="text-gold">D</span>ev's <span className="text-gold">M</span>ultispeciality <span className="text-gold">C</span>linic
+          </h2>
+          <p className="text-xs md:text-sm opacity-90 mt-2">
+            Consultation | Rehabilitation | Pharmacy | Surgicals | Diagnostics
+          </p>
+          <div className="mt-3 mx-auto h-[2px] w-32 bg-gold/70 rounded-full" />
+        </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-14 w-auto bg-white/95 rounded-md p-1" />
-            <p className="text-xs mt-3 opacity-80">
-              Consultation | Rehabilitation | Pharmacy | Surgicals | Diagnostics
-            </p>
+          <div className="md:col-span-1 flex flex-col items-center md:items-start">
+            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-20 w-auto bg-white/95 rounded-md p-1" />
+            <p className="text-xs mt-3 opacity-80">@devsmultispecialityclinic</p>
             <div className="flex gap-3 mt-4">
               <a aria-label="Instagram" href="#" className="p-2 rounded-full bg-brand-foreground/10 hover:bg-gold/30"><Instagram className="h-4 w-4" /></a>
               <a aria-label="Facebook" href="#" className="p-2 rounded-full bg-brand-foreground/10 hover:bg-gold/30"><Facebook className="h-4 w-4" /></a>
