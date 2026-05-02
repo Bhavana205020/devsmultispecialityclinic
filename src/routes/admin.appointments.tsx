@@ -2,12 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Trash2, Phone, Mail, MessageSquare } from "lucide-react";
+import { Trash2, Phone, MessageCircle, MessageSquare } from "lucide-react";
 
 export const Route = createFileRoute("/admin/appointments")({
   component: AppointmentsAdmin,
 });
 
+type ApptStatus = "pending" | "confirmed" | "rejected" | "waiting";
 type Appt = {
   id: string;
   full_name: string;
@@ -15,20 +16,31 @@ type Appt = {
   department: string;
   preferred_date: string;
   message: string | null;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: ApptStatus;
   created_at: string;
 };
 
-const STATUS_COLORS: Record<Appt["status"], string> = {
+const STATUS_COLORS: Record<ApptStatus, string> = {
   pending: "bg-orange-100 text-orange-700",
-  confirmed: "bg-blue-100 text-blue-700",
-  completed: "bg-emerald-100 text-emerald-700",
-  cancelled: "bg-red-100 text-red-700",
+  confirmed: "bg-emerald-100 text-emerald-700",
+  rejected: "bg-red-100 text-red-700",
+  waiting: "bg-blue-100 text-blue-700",
+};
+
+const TEMPLATES: Record<ApptStatus, (a: Appt) => string> = {
+  pending: (a) =>
+    `Hello ${a.full_name}, thank you for contacting Dev's Multispeciality Clinic. Your appointment request for ${a.department} on ${a.preferred_date} has been received.`,
+  confirmed: (a) =>
+    `Hello ${a.full_name}, your appointment at Dev's Multispeciality Clinic for ${a.department} on ${a.preferred_date} is CONFIRMED. Please visit the clinic at your selected time.`,
+  rejected: (a) =>
+    `Hello ${a.full_name}, sorry your appointment for ${a.department} on ${a.preferred_date} could not be confirmed. Please contact us to reschedule.`,
+  waiting: (a) =>
+    `Hello ${a.full_name}, your appointment for ${a.department} on ${a.preferred_date} is currently on our WAITING list. We will update you shortly.`,
 };
 
 function AppointmentsAdmin() {
   const [items, setItems] = useState<Appt[]>([]);
-  const [filter, setFilter] = useState<"all" | Appt["status"]>("all");
+  const [filter, setFilter] = useState<"all" | ApptStatus>("all");
 
   const load = async () => {
     const { data } = await supabase.from("appointments").select("*").order("created_at", { ascending: false });
@@ -36,10 +48,10 @@ function AppointmentsAdmin() {
   };
   useEffect(() => { load(); }, []);
 
-  const updateStatus = async (id: string, status: Appt["status"]) => {
-    const { error } = await supabase.from("appointments").update({ status }).eq("id", id);
+  const updateStatus = async (a: Appt, status: ApptStatus) => {
+    const { error } = await supabase.from("appointments").update({ status }).eq("id", a.id);
     if (error) return toast.error(error.message);
-    toast.success("Status updated.");
+    toast.success(`Marked ${status}. Click WhatsApp to notify the patient.`);
     load();
   };
 
@@ -50,17 +62,23 @@ function AppointmentsAdmin() {
     load();
   };
 
+  const waLink = (a: Appt) => {
+    const phone = a.phone.replace(/\D/g, "");
+    const msg = encodeURIComponent(TEMPLATES[a.status](a));
+    return `https://wa.me/${phone}?text=${msg}`;
+  };
+
   const filtered = filter === "all" ? items : items.filter((i) => i.status === filter);
 
   return (
     <div>
       <div>
         <h1 className="text-3xl font-bold text-brand">Appointments</h1>
-        <p className="text-muted-foreground mt-1">Patient booking requests from the website.</p>
+        <p className="text-muted-foreground mt-1">Patient bookings — update status, then click WhatsApp to notify the patient.</p>
       </div>
 
       <div className="flex gap-2 mt-6 flex-wrap">
-        {(["all", "pending", "confirmed", "completed", "cancelled"] as const).map((s) => (
+        {(["all", "pending", "confirmed", "waiting", "rejected"] as const).map((s) => (
           <button
             key={s}
             onClick={() => setFilter(s)}
@@ -88,15 +106,20 @@ function AppointmentsAdmin() {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  <span className="font-medium text-foreground">{a.department}</span> ·{" "}
-                  Preferred date: <span className="font-medium text-foreground">{a.preferred_date}</span>
+                  <span className="font-medium text-foreground">{a.department}</span> · Date:{" "}
+                  <span className="font-medium text-foreground">{a.preferred_date}</span>
                 </p>
                 <div className="flex gap-4 mt-2 text-sm text-foreground/80 flex-wrap">
                   <a href={`tel:${a.phone}`} className="inline-flex items-center gap-1 hover:text-brand">
                     <Phone className="h-3.5 w-3.5" /> {a.phone}
                   </a>
-                  <a href={`https://wa.me/${a.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-brand">
-                    <Mail className="h-3.5 w-3.5" /> WhatsApp
+                  <a
+                    href={waLink(a)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-emerald-700 hover:underline font-medium"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" /> Send WhatsApp ({a.status})
                   </a>
                 </div>
                 {a.message && (
@@ -112,13 +135,13 @@ function AppointmentsAdmin() {
               <div className="flex flex-col gap-2 min-w-[160px]">
                 <select
                   value={a.status}
-                  onChange={(e) => updateStatus(a.id, e.target.value as Appt["status"])}
+                  onChange={(e) => updateStatus(a, e.target.value as ApptStatus)}
                   className="text-sm rounded border border-border bg-background px-2 py-1.5"
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option value="waiting">Waiting</option>
+                  <option value="rejected">Rejected</option>
                 </select>
                 <button
                   onClick={() => remove(a.id)}

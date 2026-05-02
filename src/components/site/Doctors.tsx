@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserRound } from "lucide-react";
+import { UserRound, Award } from "lucide-react";
 
 type Doctor = {
   id: string;
@@ -9,6 +9,8 @@ type Doctor = {
   qualifications: string | null;
   specialty: string;
   photo_url: string | null;
+  description: string | null;
+  experience: string | null;
 };
 
 export function Doctors() {
@@ -22,6 +24,9 @@ export function Doctors() {
       .order("display_order")
       .then(({ data }) => setDocs((data as Doctor[]) ?? []));
   }, []);
+
+  const scrollToBooking = () =>
+    document.getElementById("appointment")?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <section id="doctors" className="py-20 bg-soft/40">
@@ -37,7 +42,7 @@ export function Doctors() {
           {docs.map((d) => (
             <article
               key={d.id}
-              className="bg-card border border-border rounded-2xl p-6 text-center shadow-card"
+              className="bg-card border border-border rounded-2xl p-6 text-center shadow-card hover:shadow-soft transition-shadow"
             >
               <div className="mx-auto w-28 h-28 rounded-full overflow-hidden bg-soft border-4 border-gold/30 mb-4 flex items-center justify-center">
                 {d.photo_url ? (
@@ -48,11 +53,26 @@ export function Doctors() {
               </div>
               <h3 className="text-xl font-bold text-brand">{d.name}</h3>
               <p className="text-sm font-medium text-foreground mt-1">{d.title}</p>
+              <p className="text-xs mt-2 inline-block px-3 py-0.5 rounded-full bg-gold/15 text-gold-foreground font-medium">
+                {d.specialty}
+              </p>
               {d.qualifications && (
-                <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-                  {d.qualifications}
+                <p className="text-xs text-muted-foreground mt-3 leading-relaxed">{d.qualifications}</p>
+              )}
+              {d.experience && (
+                <p className="text-xs text-brand mt-2 inline-flex items-center gap-1 font-semibold">
+                  <Award className="h-3 w-3" /> {d.experience}
                 </p>
               )}
+              {d.description && (
+                <p className="text-xs text-muted-foreground mt-2 line-clamp-3">{d.description}</p>
+              )}
+              <button
+                onClick={scrollToBooking}
+                className="mt-4 text-xs font-semibold text-brand border border-brand/30 rounded-full px-4 py-1.5 hover:bg-brand hover:text-brand-foreground transition-colors"
+              >
+                View Profile
+              </button>
             </article>
           ))}
         </div>
