@@ -54,7 +54,9 @@ export type Database = {
         Row: {
           active: boolean
           created_at: string
+          description: string | null
           display_order: number
+          experience: string | null
           id: string
           name: string
           photo_url: string | null
@@ -66,7 +68,9 @@ export type Database = {
         Insert: {
           active?: boolean
           created_at?: string
+          description?: string | null
           display_order?: number
+          experience?: string | null
           id?: string
           name: string
           photo_url?: string | null
@@ -78,7 +82,9 @@ export type Database = {
         Update: {
           active?: boolean
           created_at?: string
+          description?: string | null
           display_order?: number
+          experience?: string | null
           id?: string
           name?: string
           photo_url?: string | null
@@ -86,6 +92,45 @@ export type Database = {
           specialty?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      featured_videos: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number
+          id: string
+          person_name: string
+          role: string | null
+          thumbnail_url: string | null
+          title: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          id?: string
+          person_name: string
+          role?: string | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          id?: string
+          person_name?: string
+          role?: string | null
+          thumbnail_url?: string | null
+          title?: string | null
+          updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -119,6 +164,57 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      social_channels: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number
+          handle: string | null
+          id: string
+          platform: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          handle?: string | null
+          id?: string
+          platform: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number
+          handle?: string | null
+          id?: string
+          platform?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
         }
         Relationships: []
       }
@@ -191,7 +287,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
-      appointment_status: "pending" | "confirmed" | "completed" | "cancelled"
+      appointment_status: "pending" | "confirmed" | "rejected" | "waiting"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -320,7 +416,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      appointment_status: ["pending", "confirmed", "completed", "cancelled"],
+      appointment_status: ["pending", "confirmed", "rejected", "waiting"],
     },
   },
 } as const

@@ -9,6 +9,7 @@ import { AppointmentForm } from "@/components/site/AppointmentForm";
 import { Testimonials } from "@/components/site/Testimonials";
 import { Subscribe } from "@/components/site/Subscribe";
 import { ContactFooter } from "@/components/site/ContactFooter";
+import { FloatingActions } from "@/components/site/FloatingActions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,6 +45,7 @@ function Index() {
         <Subscribe />
         <ContactFooter />
       </main>
+      <FloatingActions />
     </div>
   );
 }

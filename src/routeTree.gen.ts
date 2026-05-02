@@ -13,9 +13,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
+import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminDoctorsRouteImport } from './routes/admin.doctors'
+import { Route as AdminChannelsRouteImport } from './routes/admin.channels'
 import { Route as AdminAppointmentsRouteImport } from './routes/admin.appointments'
 
 const AdminRoute = AdminRouteImport.update({
@@ -38,6 +40,11 @@ const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
   path: '/testimonials',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
+  id: '/subscribers',
+  path: '/subscribers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -53,6 +60,11 @@ const AdminDoctorsRoute = AdminDoctorsRouteImport.update({
   path: '/doctors',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminChannelsRoute = AdminChannelsRouteImport.update({
+  id: '/channels',
+  path: '/channels',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAppointmentsRoute = AdminAppointmentsRouteImport.update({
   id: '/appointments',
   path: '/appointments',
@@ -63,18 +75,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/appointments': typeof AdminAppointmentsRoute
+  '/admin/channels': typeof AdminChannelsRoute
   '/admin/doctors': typeof AdminDoctorsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/appointments': typeof AdminAppointmentsRoute
+  '/admin/channels': typeof AdminChannelsRoute
   '/admin/doctors': typeof AdminDoctorsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -83,9 +99,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin/appointments': typeof AdminAppointmentsRoute
+  '/admin/channels': typeof AdminChannelsRoute
   '/admin/doctors': typeof AdminDoctorsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -95,18 +113,22 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/appointments'
+    | '/admin/channels'
     | '/admin/doctors'
     | '/admin/login'
     | '/admin/services'
+    | '/admin/subscribers'
     | '/admin/testimonials'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin/appointments'
+    | '/admin/channels'
     | '/admin/doctors'
     | '/admin/login'
     | '/admin/services'
+    | '/admin/subscribers'
     | '/admin/testimonials'
     | '/admin'
   id:
@@ -114,9 +136,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/appointments'
+    | '/admin/channels'
     | '/admin/doctors'
     | '/admin/login'
     | '/admin/services'
+    | '/admin/subscribers'
     | '/admin/testimonials'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -156,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTestimonialsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/subscribers': {
+      id: '/admin/subscribers'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers'
+      preLoaderRoute: typeof AdminSubscribersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
@@ -177,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDoctorsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/channels': {
+      id: '/admin/channels'
+      path: '/channels'
+      fullPath: '/admin/channels'
+      preLoaderRoute: typeof AdminChannelsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/appointments': {
       id: '/admin/appointments'
       path: '/appointments'
@@ -189,18 +227,22 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAppointmentsRoute: typeof AdminAppointmentsRoute
+  AdminChannelsRoute: typeof AdminChannelsRoute
   AdminDoctorsRoute: typeof AdminDoctorsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminServicesRoute: typeof AdminServicesRoute
+  AdminSubscribersRoute: typeof AdminSubscribersRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAppointmentsRoute: AdminAppointmentsRoute,
+  AdminChannelsRoute: AdminChannelsRoute,
   AdminDoctorsRoute: AdminDoctorsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminServicesRoute: AdminServicesRoute,
+  AdminSubscribersRoute: AdminSubscribersRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
