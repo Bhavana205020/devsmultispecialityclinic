@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export function ContactFooter() {
