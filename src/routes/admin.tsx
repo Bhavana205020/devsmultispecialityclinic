@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, useNavigate, Link, useRouterState } from "@tan
 import { useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, Stethoscope, Users, MessagesSquare, CalendarDays, LogOut, Home } from "lucide-react";
+import { LayoutDashboard, Stethoscope, Users, MessagesSquare, CalendarDays, LogOut, Home, Mail, Youtube } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({
@@ -12,10 +12,12 @@ export const Route = createFileRoute("/admin")({
 
 const NAV = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard },
+  { to: "/admin/appointments", label: "Appointments", icon: CalendarDays },
   { to: "/admin/doctors", label: "Doctors", icon: Users },
   { to: "/admin/services", label: "Services", icon: Stethoscope },
   { to: "/admin/testimonials", label: "Testimonials", icon: MessagesSquare },
-  { to: "/admin/appointments", label: "Appointments", icon: CalendarDays },
+  { to: "/admin/channels", label: "Channels & Videos", icon: Youtube },
+  { to: "/admin/subscribers", label: "Subscribers", icon: Mail },
 ];
 
 function AdminLayout() {
