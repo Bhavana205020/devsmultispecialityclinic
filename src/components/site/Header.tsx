@@ -19,69 +19,71 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/85 backdrop-blur-md border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
-        <button onClick={() => scrollTo("home")} className="flex items-center gap-2 shrink-0">
-          <img src={logo} alt="Dev's Multispeciality Clinic" className="h-12 md:h-14 w-auto" />
-        </button>
-
-        <nav className="hidden md:flex items-center gap-8">
-          {NAV.map((n) => (
-            <button
-              key={n.id}
-              onClick={() => scrollTo(n.id)}
-              className="text-sm font-medium text-foreground/80 hover:text-brand transition-colors"
-            >
-              {n.label}
-            </button>
-          ))}
-          <button
-            onClick={() => scrollTo("appointment")}
-            className="btn-gold rounded-md px-5 py-2.5 text-sm font-semibold shadow-soft"
-          >
-            Book Appointment
+    <div className="sticky top-0 z-50 w-full bg-soft/60 backdrop-blur-md py-3">
+      <header className="mx-auto max-w-7xl px-4">
+        <div className="bg-background rounded-full shadow-soft border border-border/60 flex items-center justify-between pl-4 pr-2 h-16 md:h-[68px]">
+          <button onClick={() => scrollTo("home")} className="flex items-center gap-2 shrink-0">
+            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-10 md:h-12 w-auto" />
           </button>
-          <Link
-            to="/admin/login"
-            className="text-xs font-medium text-muted-foreground hover:text-brand"
-          >
-            Admin
-          </Link>
-        </nav>
 
-        <button
-          className="md:hidden p-2 text-brand"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X /> : <Menu />}
-        </button>
-      </div>
-
-      {open && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="px-4 py-3 flex flex-col gap-2">
+          <nav className="hidden md:flex items-center gap-7">
             {NAV.map((n) => (
               <button
                 key={n.id}
                 onClick={() => scrollTo(n.id)}
-                className="text-left py-2 text-foreground/80 font-medium"
+                className="text-sm font-semibold text-foreground/80 hover:text-brand transition-colors"
               >
                 {n.label}
               </button>
             ))}
             <button
               onClick={() => scrollTo("appointment")}
-              className="btn-gold rounded-md px-5 py-2.5 text-sm font-semibold mt-2"
+              className="btn-gold rounded-full px-6 py-2.5 text-sm font-bold shadow-soft"
             >
               Book Appointment
             </button>
-            <Link to="/admin/login" className="text-sm text-muted-foreground py-2">
-              Admin Login
+            <Link
+              to="/admin/login"
+              className="text-xs font-medium text-muted-foreground hover:text-brand pr-2"
+            >
+              Admin
             </Link>
-          </div>
+          </nav>
+
+          <button
+            className="md:hidden p-2 text-brand"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X /> : <Menu />}
+          </button>
         </div>
-      )}
-    </header>
+
+        {open && (
+          <div className="md:hidden mt-2 rounded-2xl bg-background shadow-soft border border-border">
+            <div className="px-4 py-3 flex flex-col gap-2">
+              {NAV.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => scrollTo(n.id)}
+                  className="text-left py-2 text-foreground/80 font-medium"
+                >
+                  {n.label}
+                </button>
+              ))}
+              <button
+                onClick={() => scrollTo("appointment")}
+                className="btn-gold rounded-full px-5 py-2.5 text-sm font-semibold mt-2"
+              >
+                Book Appointment
+              </button>
+              <Link to="/admin/login" className="text-sm text-muted-foreground py-2">
+                Admin Login
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export function ContactFooter() {
@@ -7,14 +7,15 @@ export function ContactFooter() {
 
   return (
     <>
-      <section id="contact" className="py-16 bg-soft/40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 items-center">
+      <section id="contact" className="py-16 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <div className="inline-block border-2 border-gold rounded-xl px-6 py-3 mb-6">
-              <h3 className="text-2xl font-bold text-brand">Clinic Timings</h3>
+            <div className="inline-flex items-center gap-2 border-2 border-gold rounded-full px-6 py-2.5 mb-6 bg-soft/60">
+              <Clock className="h-5 w-5 text-gold" />
+              <h3 className="text-xl font-extrabold text-brand">Clinic Timings</h3>
             </div>
-            <p className="text-2xl font-bold text-foreground">08 : 00 AM – 09 : 00 PM</p>
-            <p className="text-lg text-muted-foreground mt-1">Monday – Saturday</p>
+            <p className="text-3xl md:text-4xl font-extrabold text-brand tracking-wide">08 : 00 AM – 09 : 00 PM</p>
+            <p className="text-lg text-foreground/70 mt-2 font-semibold">Monday – Saturday</p>
             <div className="mt-6 space-y-2 text-sm text-foreground/80">
               <p className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-gold mt-0.5" />
@@ -44,12 +45,19 @@ export function ContactFooter() {
       </section>
 
       <footer className="bg-brand text-brand-foreground pt-12 pb-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-10">
+          <h2 className="font-display text-3xl md:text-5xl font-extrabold tracking-tight">
+            <span className="text-gold">D</span>ev's <span className="text-gold">M</span>ultispeciality <span className="text-gold">C</span>linic
+          </h2>
+          <p className="text-xs md:text-sm opacity-90 mt-2">
+            Consultation | Rehabilitation | Pharmacy | Surgicals | Diagnostics
+          </p>
+          <div className="mt-3 mx-auto h-[2px] w-32 bg-gold/70 rounded-full" />
+        </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-14 w-auto bg-white/95 rounded-md p-1" />
-            <p className="text-xs mt-3 opacity-80">
-              Consultation | Rehabilitation | Pharmacy | Surgicals | Diagnostics
-            </p>
+          <div className="md:col-span-1 flex flex-col items-center md:items-start">
+            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-20 w-auto bg-white/95 rounded-md p-1" />
+            <p className="text-xs mt-3 opacity-80">@devsmultispecialityclinic</p>
             <div className="flex gap-3 mt-4">
               <a aria-label="Instagram" href="#" className="p-2 rounded-full bg-brand-foreground/10 hover:bg-gold/30"><Instagram className="h-4 w-4" /></a>
               <a aria-label="Facebook" href="#" className="p-2 rounded-full bg-brand-foreground/10 hover:bg-gold/30"><Facebook className="h-4 w-4" /></a>
