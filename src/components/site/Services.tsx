@@ -55,6 +55,12 @@ export function Services() {
                 </div>
                 <h3 className="text-lg font-semibold text-brand mb-2">{s.name}</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">{s.description}</p>
+                <button
+                  onClick={() => document.getElementById("appointment")?.scrollIntoView({ behavior: "smooth" })}
+                  className="mt-3 text-xs font-semibold text-gold hover:underline"
+                >
+                  Read More →
+                </button>
               </div>
             );
           })}
