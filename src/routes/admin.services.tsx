@@ -2,7 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import {
+  Plus, Pencil, Trash2, X,
+  Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
+  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
+  type LucideIcon,
+} from "lucide-react";
 
 export const Route = createFileRoute("/admin/services")({
   component: ServicesAdmin,
@@ -25,7 +30,11 @@ const empty: Omit<Service, "id"> = {
   active: true,
 };
 
-const ICON_OPTIONS = ["Bone", "Activity", "Stethoscope", "Dumbbell", "Pill", "Scissors", "ScanLine", "TestTube", "HeartPulse", "Microscope"];
+const ICON_MAP: Record<string, LucideIcon> = {
+  Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
+  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
+};
+const ICON_OPTIONS = Object.keys(ICON_MAP);
 
 function ServicesAdmin() {
   const [items, setItems] = useState<Service[]>([]);
@@ -93,7 +102,19 @@ function ServicesAdmin() {
                 <td className="p-3">{s.display_order}</td>
                 <td className="p-3 font-semibold text-brand">{s.name}</td>
                 <td className="p-3 hidden md:table-cell text-muted-foreground line-clamp-2">{s.description}</td>
-                <td className="p-3"><code className="text-xs bg-soft px-2 py-0.5 rounded">{s.icon}</code></td>
+                <td className="p-3">
+                  {(() => {
+                    const Ico = ICON_MAP[s.icon] ?? Stethoscope;
+                    return (
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-7 h-7 rounded-full bg-gold/15 inline-flex items-center justify-center">
+                          <Ico className="h-4 w-4 text-gold" />
+                        </span>
+                        <code className="text-[11px] text-muted-foreground">{s.icon}</code>
+                      </span>
+                    );
+                  })()}
+                </td>
                 <td className="p-3">{s.active ? "✓" : "✗"}</td>
                 <td className="p-3">
                   <div className="flex gap-2 justify-end">
@@ -117,9 +138,32 @@ function ServicesAdmin() {
             <div className="p-5 space-y-4">
               <input className={inputCls} placeholder="Name" value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
               <textarea className={inputCls} rows={3} placeholder="Description" value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
-              <select className={inputCls} value={editing.icon} onChange={(e) => setEditing({ ...editing, icon: e.target.value })}>
-                {ICON_OPTIONS.map((i) => <option key={i}>{i}</option>)}
-              </select>
+
+              <div>
+                <label className="text-sm font-medium">Pick an icon</label>
+                <div className="mt-2 grid grid-cols-6 sm:grid-cols-8 gap-2">
+                  {ICON_OPTIONS.map((name) => {
+                    const Ico = ICON_MAP[name];
+                    const selected = editing.icon === name;
+                    return (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => setEditing({ ...editing, icon: name })}
+                        title={name}
+                        className={`aspect-square rounded-lg border-2 flex items-center justify-center transition-all ${
+                          selected
+                            ? "border-gold bg-gold/15 shadow-sm scale-105"
+                            : "border-border bg-background hover:border-gold/50 hover:bg-soft"
+                        }`}
+                      >
+                        <Ico className={`h-5 w-5 ${selected ? "text-gold" : "text-muted-foreground"}`} />
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1.5">Selected: <code>{editing.icon}</code></p>
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <input type="number" className={inputCls} placeholder="Display order" value={editing.display_order} onChange={(e) => setEditing({ ...editing, display_order: Number(e.target.value) })} />
                 <select className={inputCls} value={editing.active ? "1" : "0"} onChange={(e) => setEditing({ ...editing, active: e.target.value === "1" })}>
