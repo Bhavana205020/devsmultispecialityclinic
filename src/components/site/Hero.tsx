@@ -20,31 +20,38 @@ export function Hero() {
             needs, in one place.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3 pt-2 items-center">
             <a
               href="tel:+919666205020"
-              className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-5 py-3 font-semibold shadow-soft hover:opacity-90"
+              className="inline-flex items-center gap-3 rounded-full bg-brand text-brand-foreground pl-2 pr-5 py-2 font-semibold shadow-soft hover:opacity-90"
             >
-              <Phone className="h-4 w-4" />
-              <span>
-                <span className="block text-[10px] font-normal opacity-80 leading-none">Call Now</span>
-                +91 9666 20 50 20
+              <span className="h-9 w-9 rounded-full bg-brand-foreground/15 flex items-center justify-center">
+                <Phone className="h-4 w-4 text-gold" />
+              </span>
+              <span className="leading-tight text-left">
+                <span className="block text-[10px] font-normal opacity-80">Call Now</span>
+                <span className="text-sm">+91 9686 20 50 20</span>
               </span>
             </a>
-            <button
-              onClick={() => scrollTo("appointment")}
-              className="btn-gold rounded-md px-5 py-3 font-semibold inline-flex items-center gap-2 shadow-soft"
+            <a
+              href="tel:+919666205020"
+              className="inline-flex items-center gap-3 rounded-full btn-gold pl-2 pr-5 py-2 font-semibold shadow-soft"
             >
-              <Calendar className="h-4 w-4" />
-              Book Your Appointment Now
-            </button>
+              <span className="h-9 w-9 rounded-full bg-background/30 flex items-center justify-center">
+                <Phone className="h-4 w-4 text-gold-foreground" />
+              </span>
+              <span className="leading-tight text-left">
+                <span className="block text-[10px] font-normal opacity-80">Call Now</span>
+                <span className="text-sm">+91 9686 20 50 20</span>
+              </span>
+            </a>
             <a
               href="https://wa.me/919666205020"
               target="_blank"
               rel="noreferrer"
-              className="rounded-md bg-emerald-600 text-white px-5 py-3 font-semibold inline-flex items-center gap-2 shadow-soft hover:bg-emerald-700"
+              className="inline-flex items-center gap-2 rounded-full bg-background border border-border text-brand px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft"
             >
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-4 w-4 text-emerald-600" />
               Chat On WhatsApp
             </a>
           </div>
