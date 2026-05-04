@@ -48,7 +48,7 @@
   --gold-foreground: oklch(0.20 0.04 100);
   --soft: oklch(0.97 0.015 90);               /* warm cream card bg */
 
-  --background: oklch(1 0 0);
+  --background: oklch(0.972 0.002 220);   /* very light grey #f5f5f5 */
   --foreground: oklch(0.22 0.03 230);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0.03 230);
