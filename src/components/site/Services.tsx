@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  Bone,
-  Activity,
-  Stethoscope,
-  Dumbbell,
-  Pill,
-  Scissors,
-  ScanLine,
-  TestTube,
+  Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
+  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
   type LucideIcon,
 } from "lucide-react";
+import { ServiceCardSkeleton } from "@/components/ui/skeleton-cards";
 
 const ICONS: Record<string, LucideIcon> = {
   Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
+  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
 };
 
 type Service = {
@@ -25,6 +21,7 @@ type Service = {
 
 export function Services() {
   const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase
@@ -32,7 +29,10 @@ export function Services() {
       .select("id,name,description,icon")
       .eq("active", true)
       .order("display_order")
-      .then(({ data }) => setServices(data ?? []));
+      .then(({ data }) => {
+        setServices(data ?? []);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -46,7 +46,8 @@ export function Services() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {services.map((s) => {
+          {loading && Array.from({ length: 8 }).map((_, i) => <ServiceCardSkeleton key={i} />)}
+          {!loading && services.map((s) => {
             const Icon = ICONS[s.icon] ?? Stethoscope;
             return (
               <div key={s.id} className="service-card p-6 text-center">

@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Star, UserCircle2 } from "lucide-react";
+import { TestimonialCardSkeleton } from "@/components/ui/skeleton-cards";
 
 type T = { id: string; patient_name: string; rating: number; message: string };
 
 export function Testimonials() {
   const [items, setItems] = useState<T[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     supabase
       .from("testimonials")
       .select("id,patient_name,rating,message")
       .eq("active", true)
       .order("display_order")
-      .then(({ data }) => setItems((data as T[]) ?? []));
+      .then(({ data }) => {
+        setItems((data as T[]) ?? []);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -23,7 +28,8 @@ export function Testimonials() {
           <h2 className="text-3xl md:text-4xl heading-display mt-2">What Our Patients Say</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {items.map((t) => (
+          {loading && Array.from({ length: 3 }).map((_, i) => <TestimonialCardSkeleton key={i} />)}
+          {!loading && items.map((t) => (
             <div key={t.id} className="bg-soft rounded-2xl p-6 shadow-card">
               <div className="flex gap-1 mb-3">
                 {Array.from({ length: t.rating }).map((_, i) => (

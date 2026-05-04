@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { Menu, X, UserRound } from "lucide-react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
+import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
   { id: "home", label: "Home" },
@@ -12,9 +13,22 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const nav = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSignedIn(!!session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   const scrollTo = (id: string) => {
     setOpen(false);
+    if (location.pathname !== "/") {
+      nav({ to: "/", hash: id });
+      return;
+    }
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -42,12 +56,22 @@ export function Header() {
             >
               Book Appointment
             </button>
-            <Link
-              to="/admin/login"
-              className="text-xs font-medium text-muted-foreground hover:text-brand pr-2"
-            >
-              Admin
-            </Link>
+            {signedIn ? (
+              <Link
+                to="/profile"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:opacity-80 pr-2"
+                aria-label="My profile"
+              >
+                <UserRound className="h-4 w-4" /> Profile
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="text-sm font-semibold text-brand hover:opacity-80 pr-2"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
 
           <button
@@ -77,9 +101,15 @@ export function Header() {
               >
                 Book Appointment
               </button>
-              <Link to="/admin/login" className="text-sm text-muted-foreground py-2">
-                Admin Login
-              </Link>
+              {signedIn ? (
+                <Link to="/profile" className="text-sm font-semibold text-brand py-2">
+                  My Profile
+                </Link>
+              ) : (
+                <Link to="/login" className="text-sm font-semibold text-brand py-2">
+                  Sign In / Register
+                </Link>
+              )}
             </div>
           </div>
         )}
