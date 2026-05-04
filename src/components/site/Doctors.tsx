@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserRound, Award } from "lucide-react";
+import { DoctorCardSkeleton } from "@/components/ui/skeleton-cards";
 
 type Doctor = {
   id: string;
@@ -15,6 +16,7 @@ type Doctor = {
 
 export function Doctors() {
   const [docs, setDocs] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase
@@ -22,7 +24,10 @@ export function Doctors() {
       .select("*")
       .eq("active", true)
       .order("display_order")
-      .then(({ data }) => setDocs((data as Doctor[]) ?? []));
+      .then(({ data }) => {
+        setDocs((data as Doctor[]) ?? []);
+        setLoading(false);
+      });
   }, []);
 
   const scrollToBooking = () =>
@@ -39,7 +44,8 @@ export function Doctors() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {docs.map((d) => (
+          {loading && Array.from({ length: 3 }).map((_, i) => <DoctorCardSkeleton key={i} />)}
+          {!loading && docs.map((d) => (
             <article
               key={d.id}
               className="bg-card border border-border rounded-2xl p-6 text-center shadow-card hover:shadow-soft transition-shadow"
