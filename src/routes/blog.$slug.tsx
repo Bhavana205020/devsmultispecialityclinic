@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Clock, Tag, CheckCircle2, Share2 } from "lucide-react";
-import { blogBySlug } from "@/lib/blog-content";
+import { blogBySlug, type BlogPost } from "@/lib/blog-content";
 import { Header } from "@/components/site/Header";
 import { ContactFooter } from "@/components/site/ContactFooter";
 import { FloatingActions } from "@/components/site/FloatingActions";
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPage() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: BlogPost };
 
   return (
     <div className="min-h-screen bg-background">
