@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
-  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
-  type LucideIcon,
-} from "lucide-react";
+import { Stethoscope } from "lucide-react";
 import { ServiceCardSkeleton } from "@/components/ui/skeleton-cards";
-
-const ICONS: Record<string, LucideIcon> = {
-  Bone, Activity, Stethoscope, Dumbbell, Pill, Scissors, ScanLine, TestTube,
-  HeartPulse, Microscope, Baby, Brain, Eye, Smile, Syringe, Hospital,
-};
 
 type Service = {
   id: string;
@@ -18,6 +9,32 @@ type Service = {
   description: string;
   icon: string;
 };
+
+// Map service name (normalized) → uploaded PNG filename in /public/services/
+const NAME_TO_IMAGE: Record<string, string> = {
+  "orthopaedic": "Orthopaedic.png",
+  "orthopedic": "Orthopaedic.png",
+  "diagnostics": "Diagnostics.png",
+  "digital x-ray": "Digital_X-ray.png",
+  "digital xray": "Digital_X-ray.png",
+  "x-ray": "Digital_X-ray.png",
+  "gastroenterology": "Gastroenterology.png",
+  "general physician": "General_physician.png",
+  "consultation": "General_physician.png",
+  "pharmacy": "Pharmacy.png",
+  "physiotherapy": "Physiotherapy.png",
+  "surgicals": "Surgicals.png",
+  "surgical": "Surgicals.png",
+};
+
+function imageFor(name: string): string | null {
+  const key = name.trim().toLowerCase();
+  if (NAME_TO_IMAGE[key]) return `/services/${NAME_TO_IMAGE[key]}`;
+  // try first word match
+  const first = key.split(/\s|\//)[0];
+  if (NAME_TO_IMAGE[first]) return `/services/${NAME_TO_IMAGE[first]}`;
+  return null;
+}
 
 export function Services() {
   const [services, setServices] = useState<Service[]>([]);
@@ -45,20 +62,31 @@ export function Services() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {loading && Array.from({ length: 8 }).map((_, i) => <ServiceCardSkeleton key={i} />)}
           {!loading && services.map((s) => {
-            const Icon = ICONS[s.icon] ?? Stethoscope;
+            const img = imageFor(s.name);
             return (
-              <div key={s.id} className="service-card p-6 text-center">
-                <div className="mx-auto w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mb-4">
-                  <Icon className="h-7 w-7 text-gold" />
+              <div key={s.id} className="service-card p-6 text-center flex flex-col">
+                <div className="mx-auto h-24 w-24 flex items-center justify-center mb-4">
+                  {img ? (
+                    <img
+                      src={img}
+                      alt={s.name}
+                      className="h-full w-full object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Stethoscope className="h-12 w-12 text-gold" />
+                  )}
                 </div>
-                <h3 className="text-lg font-semibold text-brand mb-2">{s.name}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{s.description}</p>
+                <h3 className="text-lg font-bold text-brand mb-3">{s.name}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed flex-1">
+                  {s.description}
+                </p>
                 <button
                   onClick={() => document.getElementById("appointment")?.scrollIntoView({ behavior: "smooth" })}
-                  className="mt-3 text-xs font-semibold text-gold hover:underline"
+                  className="mt-4 text-xs font-semibold text-gold hover:underline self-center"
                 >
                   Read More →
                 </button>

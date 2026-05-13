@@ -123,14 +123,15 @@
     font-weight: 700;
   }
   .service-card {
-    background: var(--soft);
-    border: 1px solid color-mix(in oklab, var(--gold) 25%, transparent);
-    border-radius: 1rem;
+    background: #ffffff;
+    border: 1.5px solid color-mix(in oklab, var(--gold) 70%, transparent);
+    border-radius: 1.25rem;
     transition: transform 200ms ease, box-shadow 200ms ease;
   }
   .service-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-card);
+    border-color: var(--gold);
   }
   .btn-gold {
     background: var(--gold);
