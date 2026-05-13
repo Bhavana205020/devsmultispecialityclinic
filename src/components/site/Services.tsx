@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Stethoscope } from "lucide-react";
 import { ServiceCardSkeleton } from "@/components/ui/skeleton-cards";
+import { slugify } from "@/lib/blog-content";
 
 type Service = {
   id: string;
@@ -84,12 +86,13 @@ export function Services() {
                 <p className="text-xs text-muted-foreground leading-relaxed flex-1">
                   {s.description}
                 </p>
-                <button
-                  onClick={() => document.getElementById("appointment")?.scrollIntoView({ behavior: "smooth" })}
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: slugify(s.name) }}
                   className="mt-4 text-xs font-semibold text-gold hover:underline self-center"
                 >
                   Read More →
-                </button>
+                </Link>
               </div>
             );
           })}
