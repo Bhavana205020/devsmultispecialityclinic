@@ -82,32 +82,44 @@ export function Subscribe() {
         )}
 
         {videos.length > 0 && (
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {videos.slice(0, 4).map((v) => {
-              const inner = (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand/20 via-transparent to-brand/40" />
-                  {v.thumbnail_url && (
-                    <div className="absolute inset-0 bg-cover bg-center opacity-90 group-hover:scale-105 transition-transform" style={{ backgroundImage: `url("${v.thumbnail_url}")` }} />
-                  )}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-11 h-11 rounded-full bg-background/95 flex items-center justify-center shadow-soft">
-                      <Play className="h-5 w-5 text-brand fill-brand ml-0.5" />
+          <div className="mt-10">
+            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide [scroll-behavior:smooth]">
+              {videos.map((v) => {
+                const inner = (
+                  <>
+                    {v.thumbnail_url && (
+                      <div
+                        className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                        style={{ backgroundImage: `url("${v.thumbnail_url}")` }}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-full bg-background/95 flex items-center justify-center shadow-soft group-hover:scale-110 transition-transform">
+                        <Play className="h-6 w-6 text-brand fill-brand ml-0.5" />
+                      </div>
                     </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-3 text-left text-white">
+                      {v.title && <p className="text-xs font-semibold opacity-90 line-clamp-2">{v.title}</p>}
+                      <p className="text-sm font-bold mt-1 leading-tight">{v.person_name}</p>
+                      {v.role && <p className="text-[11px] opacity-80 leading-tight">{v.role}</p>}
+                    </div>
+                  </>
+                );
+                const cls =
+                  "relative shrink-0 w-[200px] sm:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden bg-soft shadow-card group cursor-pointer block snap-start";
+                return v.video_url ? (
+                  <a key={v.id} href={v.video_url} target="_blank" rel="noreferrer" className={cls}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={v.id} className={cls}>
+                    {inner}
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-background/95 px-3 py-2 text-left">
-                    <p className="text-[11px] font-bold text-brand leading-tight">{v.person_name}</p>
-                    {v.role && <p className="text-[10px] text-muted-foreground leading-tight">{v.role}</p>}
-                  </div>
-                </>
-              );
-              const cls = "relative rounded-2xl overflow-hidden bg-soft shadow-card aspect-[4/3] group cursor-pointer block";
-              return v.video_url ? (
-                <a key={v.id} href={v.video_url} target="_blank" rel="noreferrer" className={cls}>{inner}</a>
-              ) : (
-                <div key={v.id} className={cls}>{inner}</div>
-              );
-            })}
+                );
+              })}
+            </div>
+            <p className="text-xs text-brand-foreground/60 mt-2">← Swipe to see more →</p>
           </div>
         )}
       </div>
