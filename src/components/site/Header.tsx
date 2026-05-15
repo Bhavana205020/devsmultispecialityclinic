@@ -35,9 +35,9 @@ export function Header() {
   return (
     <div className="sticky top-0 z-50 w-full bg-soft/60 backdrop-blur-md py-3">
       <header className="mx-auto max-w-7xl px-4">
-        <div className="bg-background rounded-full shadow-soft border border-border/60 flex items-center justify-between pl-4 pr-2 h-16 md:h-[68px]">
+        <div className="bg-background rounded-full shadow-soft border border-border/60 flex items-center justify-between pl-3 pr-2 h-20 md:h-24">
           <button onClick={() => scrollTo("home")} className="flex items-center gap-2 shrink-0">
-            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-10 md:h-12 w-auto" />
+            <img src={logo} alt="Dev's Multispeciality Clinic" className="h-20 md:h-24 w-auto" />
           </button>
 
           <nav className="hidden md:flex items-center gap-7">
