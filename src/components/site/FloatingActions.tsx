@@ -1,7 +1,8 @@
 import { MessageCircle, Calendar, Bot, X, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const WHATSAPP_NUMBER = "919876543210";
+const WHATSAPP_URL =
+  "https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -107,9 +108,7 @@ export function FloatingActions() {
 
         {/* WhatsApp */}
         <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-            "Hello, I'd like to book an appointment at Dev's Multispeciality Clinic.",
-          )}`}
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noreferrer"
           aria-label="Chat on WhatsApp"
