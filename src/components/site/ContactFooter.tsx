@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
