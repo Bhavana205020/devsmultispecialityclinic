@@ -47,7 +47,7 @@ function AdminLayout() {
     <div className="min-h-screen flex bg-soft">
       <aside className="w-64 bg-brand text-brand-foreground flex flex-col">
         <div className="p-4 border-b border-brand-foreground/10">
-          <img src={logo} alt="Logo" className="h-10 w-auto bg-white/95 rounded p-1" />
+          <img src={logo} alt="Logo" className="h-14 w-auto bg-white/95 rounded p-1" />
           <p className="text-xs mt-2 opacity-80">Admin Panel</p>
         </div>
         <nav className="flex-1 p-3 space-y-1">
