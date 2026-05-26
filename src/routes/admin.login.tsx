@@ -49,7 +49,7 @@ function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-soft px-4">
       <div className="w-full max-w-md bg-card rounded-2xl shadow-soft border border-border p-8">
         <Link to="/" className="flex justify-center mb-6">
-          <img src={logo} alt="Logo" className="h-12 w-auto" />
+          <img src={logo} alt="Logo" className="h-20 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold text-brand text-center">Admin {mode === "signin" ? "Login" : "Setup"}</h1>
         <p className="text-xs text-muted-foreground text-center mt-1">
