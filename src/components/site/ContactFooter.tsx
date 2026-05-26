@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -39,7 +39,14 @@ export function ContactFooter() {
 
               <div className="mt-6 space-y-3 text-sm text-foreground/85">
                 <ContactRow icon={<MapPin className="h-4 w-4" />}>
-                  402, 4th Floor, SMR Vinay Iconia Plaza, Masjid Banda, Kondapur, Hyderabad — 500084
+                  <a
+                    href="https://share.google/AzpVuT2fvSdFa2Uvk"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-brand"
+                  >
+                    402, 4th Floor, SMR Vinay Iconia Plaza, Masjid Banda, Kondapur, Hyderabad — 500084
+                  </a>
                 </ContactRow>
                 <ContactRow icon={<Phone className="h-4 w-4" />}>
                   <a href="tel:+919666205020" className="hover:text-brand font-semibold">+91 9666 20 50 20</a>
@@ -47,16 +54,32 @@ export function ContactFooter() {
                 <ContactRow icon={<Mail className="h-4 w-4" />}>
                   <a href="mailto:devsclinic20@gmail.com" className="hover:text-brand">devsclinic20@gmail.com</a>
                 </ContactRow>
+                <a
+                  href="https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 mt-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 text-sm font-semibold shadow-soft"
+                >
+                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                </a>
               </div>
             </div>
 
-            <div className="rounded-2xl overflow-hidden shadow-card border border-border h-72">
+            <div className="rounded-2xl overflow-hidden shadow-card border border-border h-72 relative">
               <iframe
                 title="Clinic Map"
                 src="https://maps.google.com/maps?q=SMR%20Vinay%20Iconia%20Plaza%20Kondapur%20Hyderabad&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full"
                 loading="lazy"
               />
+              <a
+                href="https://share.google/AzpVuT2fvSdFa2Uvk"
+                target="_blank"
+                rel="noreferrer"
+                className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-background/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-brand shadow-soft hover:bg-background"
+              >
+                <MapPin className="h-3.5 w-3.5" /> Open in Google Maps
+              </a>
             </div>
           </div>
         </div>

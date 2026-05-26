@@ -67,7 +67,7 @@ export function Hero() {
 
                 {/* WhatsApp (white pill outlined) */}
                 <a
-                  href="https://wa.me/919666205020"
+                  href="https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 rounded-full bg-white border border-foreground/15 text-foreground px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft transition"

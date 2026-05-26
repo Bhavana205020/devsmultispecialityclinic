@@ -86,7 +86,7 @@ function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-soft px-4 py-10">
       <div className="w-full max-w-md bg-card rounded-2xl shadow-soft border border-border p-8">
         <Link to="/" className="flex justify-center mb-6">
-          <img src={logo} alt="Dev's Multispeciality Clinic" className="h-14 w-auto" />
+          <img src={logo} alt="Dev's Multispeciality Clinic" className="h-20 w-auto" />
         </Link>
         <h1 className="text-2xl heading-display text-brand text-center">
           {mode === "signin" ? "Welcome Back" : "Create Your Account"}
