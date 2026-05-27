@@ -3,6 +3,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import { externalLinkProps } from "@/lib/external-link";
+
 
 export function ContactFooter() {
   const [email, setEmail] = useState("");
@@ -40,9 +42,7 @@ export function ContactFooter() {
               <div className="mt-6 space-y-3 text-sm text-foreground/85">
                 <ContactRow icon={<MapPin className="h-4 w-4" />}>
                   <a
-                    href="https://share.google/AzpVuT2fvSdFa2Uvk"
-                    target="_blank"
-                    rel="noreferrer"
+                    {...externalLinkProps("https://share.google/AzpVuT2fvSdFa2Uvk")}
                     className="hover:text-brand"
                   >
                     402, 4th Floor, SMR Vinay Iconia Plaza, Masjid Banda, Kondapur, Hyderabad — 500084
@@ -55,9 +55,7 @@ export function ContactFooter() {
                   <a href="mailto:devsclinic20@gmail.com" className="hover:text-brand">devsclinic20@gmail.com</a>
                 </ContactRow>
                 <a
-                  href="https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0"
-                  target="_blank"
-                  rel="noreferrer"
+                  {...externalLinkProps("https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0")}
                   className="inline-flex items-center gap-2 mt-2 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 text-sm font-semibold shadow-soft"
                 >
                   <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
@@ -73,9 +71,7 @@ export function ContactFooter() {
                 loading="lazy"
               />
               <a
-                href="https://share.google/AzpVuT2fvSdFa2Uvk"
-                target="_blank"
-                rel="noreferrer"
+                {...externalLinkProps("https://share.google/AzpVuT2fvSdFa2Uvk")}
                 className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-background/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-brand shadow-soft hover:bg-background"
               >
                 <MapPin className="h-3.5 w-3.5" /> Open in Google Maps

@@ -30,6 +30,19 @@ function LoginPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [form, setForm] = useState({ full_name: "", email: "", password: "" });
   const [busy, setBusy] = useState(false);
+  const [resetBusy, setResetBusy] = useState(false);
+
+  const sendReset = async () => {
+    const email = form.email.trim();
+    if (!email) return toast.error("Enter your email above first, then click Forgot password.");
+    setResetBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + "/login",
+    });
+    setResetBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Password reset link sent. Check your inbox.");
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -149,6 +162,18 @@ function LoginPage() {
               className={inputCls}
             />
           </Field>
+          {mode === "signin" && (
+            <div className="flex justify-end -mt-2">
+              <button
+                type="button"
+                onClick={sendReset}
+                disabled={resetBusy}
+                className="text-xs font-semibold text-brand hover:underline disabled:opacity-60"
+              >
+                {resetBusy ? "Sending..." : "Forgot password?"}
+              </button>
+            </div>
+          )}
           <button
             type="submit"
             disabled={busy}

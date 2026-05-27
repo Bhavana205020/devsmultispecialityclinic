@@ -1,5 +1,6 @@
 import { MessageCircle, Calendar, Bot, X, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { externalLinkProps } from "@/lib/external-link";
 
 const WHATSAPP_URL =
   "https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0";
@@ -108,9 +109,7 @@ export function FloatingActions() {
 
         {/* WhatsApp */}
         <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noreferrer"
+          {...externalLinkProps(WHATSAPP_URL)}
           aria-label="Chat on WhatsApp"
           className="h-14 w-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-soft flex items-center justify-center transition-transform hover:scale-110"
         >
