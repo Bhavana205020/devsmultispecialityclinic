@@ -1,5 +1,7 @@
 import { Phone, MessageCircle, CalendarDays } from "lucide-react";
 import hero from "@/assets/hero-clinic.jpg";
+import { externalLinkProps } from "@/lib/external-link";
+
 
 export function Hero() {
   return (
@@ -67,9 +69,7 @@ export function Hero() {
 
                 {/* WhatsApp (white pill outlined) */}
                 <a
-                  href="https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0"
-                  target="_blank"
-                  rel="noreferrer"
+                  {...externalLinkProps("https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0")}
                   className="inline-flex items-center gap-2 rounded-full bg-white border border-foreground/15 text-foreground px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft transition"
                 >
                   <span className="h-7 w-7 rounded-full border border-emerald-600 flex items-center justify-center">
