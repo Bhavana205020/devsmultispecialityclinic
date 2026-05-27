@@ -162,6 +162,18 @@ function LoginPage() {
               className={inputCls}
             />
           </Field>
+          {mode === "signin" && (
+            <div className="flex justify-end -mt-2">
+              <button
+                type="button"
+                onClick={sendReset}
+                disabled={resetBusy}
+                className="text-xs font-semibold text-brand hover:underline disabled:opacity-60"
+              >
+                {resetBusy ? "Sending..." : "Forgot password?"}
+              </button>
+            </div>
+          )}
           <button
             type="submit"
             disabled={busy}
