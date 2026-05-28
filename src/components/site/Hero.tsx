@@ -69,7 +69,7 @@ export function Hero() {
 
                 {/* WhatsApp (white pill outlined) */}
                 <a
-                  {...externalLinkProps("https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0")}
+                  {...externalLinkProps("https://wa.me/919666205020?text=Hello%20Dev%27s%20Multispeciality%20Clinic")}
                   className="inline-flex items-center gap-2 rounded-full bg-white border border-foreground/15 text-foreground px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft transition"
                 >
                   <span className="h-7 w-7 rounded-full border border-emerald-600 flex items-center justify-center">

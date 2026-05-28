@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { externalLinkProps } from "@/lib/external-link";
 
 const WHATSAPP_URL =
-  "https://api.whatsapp.com/send/?phone=919666205020&text&type=phone_number&app_absent=0";
+  "https://wa.me/919666205020?text=Hello%20Dev%27s%20Multispeciality%20Clinic";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
