@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import logo from "@/assets/logo.png";
 import { Mail, Lock, User, Loader2 } from "lucide-react";
+import { getPostLoginPath } from "@/lib/auth-routing";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -45,8 +46,11 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) nav({ to: "/profile" });
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const destination = await getPostLoginPath(session.user.id);
+        nav({ to: destination });
+      }
     });
   }, [nav]);
 
@@ -78,7 +82,9 @@ function LoginPage() {
           return;
         }
         toast.success("Welcome to Dev's Multispeciality Clinic!");
-        nav({ to: "/profile" });
+        const { data: userData } = await supabase.auth.getUser();
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/";
+        nav({ to: destination });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: form.email,
@@ -86,7 +92,9 @@ function LoginPage() {
         });
         if (error) throw error;
         toast.success("Welcome back!");
-        nav({ to: "/profile" });
+        const { data: userData } = await supabase.auth.getUser();
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/";
+        nav({ to: destination });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
