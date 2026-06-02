@@ -83,7 +83,7 @@ function LoginPage() {
         }
         toast.success("Welcome to Dev's Multispeciality Clinic!");
         const { data: userData } = await supabase.auth.getUser();
-        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/profile";
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/";
         nav({ to: destination });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -93,7 +93,7 @@ function LoginPage() {
         if (error) throw error;
         toast.success("Welcome back!");
         const { data: userData } = await supabase.auth.getUser();
-        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/profile";
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/";
         nav({ to: destination });
       }
     } catch (err) {
