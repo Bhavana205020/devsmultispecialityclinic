@@ -7,6 +7,7 @@ import { TopBar } from "@/components/site/TopBar";
 import { Header } from "@/components/site/Header";
 import { ContactFooter } from "@/components/site/ContactFooter";
 import { Skeleton } from "@/components/ui/skeleton";
+import { isAdminUser } from "@/lib/auth-routing";
 import {
   UserRound, Upload, LogOut, Mail, Phone, Calendar, User,
   CalendarCheck, Clock, CheckCircle2, XCircle, Loader2,
@@ -70,6 +71,10 @@ function ProfilePage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         nav({ to: "/login" });
+        return;
+      }
+      if (await isAdminUser(session.user.id)) {
+        nav({ to: "/admin" });
         return;
       }
       setUserId(session.user.id);
