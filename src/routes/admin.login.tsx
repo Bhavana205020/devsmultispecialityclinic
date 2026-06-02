@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
+import { isAdminUser } from "@/lib/auth-routing";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({ meta: [{ title: "Admin Login — Dev's Multispeciality Clinic" }] }),
@@ -17,10 +18,20 @@ function AdminLogin() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) nav({ to: "/admin" });
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user && await isAdminUser(session.user.id)) nav({ to: "/admin" });
     });
   }, [nav]);
+
+  const sendToAdminIfAllowed = async () => {
+    const { data: userData } = await supabase.auth.getUser();
+    if (userData.user && await isAdminUser(userData.user.id)) {
+      nav({ to: "/admin" });
+      return;
+    }
+    await supabase.auth.signOut();
+    toast.error("This login is not assigned admin access.");
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,12 +47,12 @@ function AdminLogin() {
       toast.success("Account created. Signing you in...");
       const { error: signErr } = await supabase.auth.signInWithPassword({ email, password });
       if (signErr) return toast.error(signErr.message);
-      nav({ to: "/admin" });
+      await sendToAdminIfAllowed();
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setBusy(false);
       if (error) return toast.error(error.message);
-      nav({ to: "/admin" });
+      await sendToAdminIfAllowed();
     }
   };
 
