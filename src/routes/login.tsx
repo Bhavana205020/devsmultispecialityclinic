@@ -25,6 +25,21 @@ const signUpSchema = signInSchema.extend({
   full_name: z.string().trim().min(2, "Name is required").max(100),
 });
 
+async function getPostLoginRoute(userId: string) {
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (error) {
+    console.error("Unable to check admin role", error);
+  }
+
+  return data?.role === "admin" ? "/admin" : "/profile";
+}
+
 function LoginPage() {
   const nav = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -45,8 +60,11 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) nav({ to: "/profile" });
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const destination = await getPostLoginRoute(session.user.id);
+        nav({ to: destination });
+      }
     });
   }, [nav]);
 
@@ -78,7 +96,9 @@ function LoginPage() {
           return;
         }
         toast.success("Welcome to Dev's Multispeciality Clinic!");
-        nav({ to: "/profile" });
+        const { data: userData } = await supabase.auth.getUser();
+        const destination = userData.user ? await getPostLoginRoute(userData.user.id) : "/profile";
+        nav({ to: destination });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: form.email,
@@ -86,7 +106,9 @@ function LoginPage() {
         });
         if (error) throw error;
         toast.success("Welcome back!");
-        nav({ to: "/profile" });
+        const { data: userData } = await supabase.auth.getUser();
+        const destination = userData.user ? await getPostLoginRoute(userData.user.id) : "/profile";
+        nav({ to: destination });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
