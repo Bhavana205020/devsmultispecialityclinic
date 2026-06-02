@@ -9,45 +9,53 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+    let active = true;
+
+    const applySession = async (s: Session | null) => {
+      if (!active) return;
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) {
-        // Defer the role check to avoid deadlocks
-        setTimeout(() => {
-          supabase
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", s.user.id)
-            .eq("role", "admin")
-            .maybeSingle()
-            .then(({ data }) => setIsAdmin(!!data));
-        }, 0);
-      } else {
+      setIsAdmin(false);
+
+      if (!s?.user) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", s.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      if (!active) return;
+      if (error) {
+        console.error("Admin role check failed", error);
         setIsAdmin(false);
+      } else {
+        setIsAdmin(!!data);
+      }
+      setLoading(false);
+    };
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (s?.user) {
+        setTimeout(() => applySession(s), 0);
+      } else {
+        applySession(null);
       }
     });
 
     supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setUser(s?.user ?? null);
-      if (s?.user) {
-        supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", s.user.id)
-          .eq("role", "admin")
-          .maybeSingle()
-          .then(({ data }) => {
-            setIsAdmin(!!data);
-            setLoading(false);
-          });
-      } else {
-        setLoading(false);
-      }
+      applySession(s);
     });
 
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   return { session, user, isAdmin, loading };

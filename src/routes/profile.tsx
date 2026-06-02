@@ -35,7 +35,7 @@ type Appt = {
 };
 
 const schema = z.object({
-  full_name: z.string().trim().min(2, "Name must be 2+ characters").max(100),
+  full_name: z.string().trim().max(100).optional().or(z.literal("")),
   phone: z.string().trim().max(20).regex(/^[0-9+\-\s()]*$/, "Invalid phone").optional().or(z.literal("")),
   date_of_birth: z.string().optional().or(z.literal("")),
   gender: z.string().max(20).optional().or(z.literal("")),
@@ -144,7 +144,7 @@ function ProfilePage() {
       .upsert(
         {
           user_id: userId,
-          full_name: profile.full_name,
+          full_name: profile.full_name || null,
           phone: profile.phone || null,
           date_of_birth: profile.date_of_birth || null,
           gender: profile.gender || null,
@@ -194,7 +194,7 @@ function ProfilePage() {
               </div>
             ) : (
               <>
-                <div className="flex items-center gap-5 mb-6 pb-5 border-b border-border">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 pb-5 border-b border-border">
                   <div className="w-24 h-24 rounded-full overflow-hidden bg-soft border-4 border-gold/30 flex items-center justify-center shrink-0">
                     {profile.avatar_url ? (
                       <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -263,10 +263,10 @@ function ProfilePage() {
                   </Field>
                 </div>
 
-                <button
+                  <button
                   onClick={save}
                   disabled={saving}
-                  className="mt-6 btn-gold rounded-md px-6 py-2.5 font-bold inline-flex items-center gap-2 disabled:opacity-60"
+                    className="mt-6 w-full sm:w-auto btn-gold rounded-md px-6 py-2.5 font-bold inline-flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {saving && <Loader2 className="h-4 w-4 animate-spin" />}
                   Save Changes
