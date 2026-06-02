@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { isAdminUser } from "@/lib/auth-routing";
+import type { Session } from "@supabase/supabase-js";
 
 const NAV = [
   { id: "home", label: "Home" },
@@ -21,7 +22,7 @@ export function Header() {
 
   useEffect(() => {
     let active = true;
-    const applySession = async (session: Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]) => {
+    const applySession = async (session: Session | null) => {
       if (!active) return;
       setSignedIn(!!session);
       if (!session?.user) {
@@ -36,7 +37,10 @@ export function Header() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setTimeout(() => applySession(s), 0);
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   const scrollTo = (id: string) => {
