@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import logo from "@/assets/logo.png";
 import { Mail, Lock, User, Loader2 } from "lucide-react";
+import { getPostLoginPath } from "@/lib/auth-routing";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -24,21 +25,6 @@ const signInSchema = z.object({
 const signUpSchema = signInSchema.extend({
   full_name: z.string().trim().min(2, "Name is required").max(100),
 });
-
-async function getPostLoginRoute(userId: string) {
-  const { data, error } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId)
-    .eq("role", "admin")
-    .maybeSingle();
-
-  if (error) {
-    console.error("Unable to check admin role", error);
-  }
-
-  return data?.role === "admin" ? "/admin" : "/profile";
-}
 
 function LoginPage() {
   const nav = useNavigate();
@@ -62,7 +48,7 @@ function LoginPage() {
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
-        const destination = await getPostLoginRoute(session.user.id);
+        const destination = await getPostLoginPath(session.user.id);
         nav({ to: destination });
       }
     });
@@ -97,7 +83,7 @@ function LoginPage() {
         }
         toast.success("Welcome to Dev's Multispeciality Clinic!");
         const { data: userData } = await supabase.auth.getUser();
-        const destination = userData.user ? await getPostLoginRoute(userData.user.id) : "/profile";
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/profile";
         nav({ to: destination });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -107,7 +93,7 @@ function LoginPage() {
         if (error) throw error;
         toast.success("Welcome back!");
         const { data: userData } = await supabase.auth.getUser();
-        const destination = userData.user ? await getPostLoginRoute(userData.user.id) : "/profile";
+        const destination = userData.user ? await getPostLoginPath(userData.user.id) : "/profile";
         nav({ to: destination });
       }
     } catch (err) {
