@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type PostLoginPath = "/admin" | "/profile";
+export type PostLoginPath = "/admin" | "/";
 
 export async function isAdminUser(userId: string) {
   const { data, error } = await supabase
@@ -19,5 +19,5 @@ export async function isAdminUser(userId: string) {
 }
 
 export async function getPostLoginPath(userId: string): Promise<PostLoginPath> {
-  return (await isAdminUser(userId)) ? "/admin" : "/profile";
+  return (await isAdminUser(userId)) ? "/admin" : "/";
 }
