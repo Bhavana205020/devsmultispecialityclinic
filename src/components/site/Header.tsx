@@ -3,6 +3,7 @@ import { Menu, X, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 import { supabase } from "@/integrations/supabase/client";
+import { isAdminUser } from "@/lib/auth-routing";
 
 const NAV = [
   { id: "home", label: "Home" },
@@ -14,12 +15,27 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const nav = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => setSignedIn(!!session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
+    let active = true;
+    const applySession = async (session: Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]) => {
+      if (!active) return;
+      setSignedIn(!!session);
+      if (!session?.user) {
+        setAdmin(false);
+        return;
+      }
+      const isAdmin = await isAdminUser(session.user.id);
+      if (active) setAdmin(isAdmin);
+    };
+
+    supabase.auth.getSession().then(({ data: { session } }) => applySession(session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      setTimeout(() => applySession(s), 0);
+    });
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -58,11 +74,11 @@ export function Header() {
             </button>
             {signedIn ? (
               <Link
-                to="/profile"
+                to={admin ? "/admin" : "/profile"}
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:opacity-80 pr-2"
-                aria-label="My profile"
+                aria-label={admin ? "Admin dashboard" : "My profile"}
               >
-                <UserRound className="h-4 w-4" /> Profile
+                <UserRound className="h-4 w-4" /> {admin ? "Admin Dashboard" : "Profile"}
               </Link>
             ) : (
               <Link
@@ -102,8 +118,8 @@ export function Header() {
                 Book Appointment
               </button>
               {signedIn ? (
-                <Link to="/profile" className="text-sm font-semibold text-brand py-2">
-                  My Profile
+                <Link to={admin ? "/admin" : "/profile"} className="text-sm font-semibold text-brand py-2">
+                  {admin ? "Admin Dashboard" : "My Profile"}
                 </Link>
               ) : (
                 <Link to="/login" className="text-sm font-semibold text-brand py-2">
