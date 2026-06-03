@@ -1,5 +1,5 @@
 import { Phone, MessageCircle, CalendarDays } from "lucide-react";
-import hero from "@/assets/hero-clinic.jpg";
+import hero from "@/assets/hero-clinic.webp";
 import { externalLinkProps } from "@/lib/external-link";
 
 
