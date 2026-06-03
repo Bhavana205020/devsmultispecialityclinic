@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { TopBar } from "@/components/site/TopBar";
 import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
-import heroImg from "@/assets/hero-clinic.jpg";
+import heroImg from "@/assets/hero-clinic.webp";
 
 // Lazy-load below-the-fold sections to keep the initial bundle small and TTI fast
 const Services = lazy(() => import("@/components/site/Services").then(m => ({ default: m.Services })));
