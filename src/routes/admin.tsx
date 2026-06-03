@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Stethoscope, Users, MessagesSquare, CalendarDays,
   LogOut, Home, Mail, Youtube, Menu, X, Bell, Search,
 } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Dev's Multispeciality Clinic" }] }),

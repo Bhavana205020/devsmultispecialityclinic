@@ -1,9 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { Menu, X, UserRound, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
-import { supabase } from "@/integrations/supabase/client";
-import { isAdminUser } from "@/lib/auth-routing";
+import logo from "@/assets/logo.webp";
 import type { Session } from "@supabase/supabase-js";
 
 const NAV = [
@@ -24,6 +22,8 @@ export function Header() {
 
   useEffect(() => {
     let active = true;
+    let unsubscribe = () => {};
+
     const applySession = async (session: Session | null) => {
       if (!active) return;
       setSignedIn(!!session);
@@ -31,22 +31,39 @@ export function Header() {
         setAdmin(false);
         return;
       }
+      const { isAdminUser } = await import("@/lib/auth-routing");
       const isAdmin = await isAdminUser(session.user.id);
       if (active) setAdmin(isAdmin);
     };
 
-    supabase.auth.getSession().then(({ data: { session } }) => applySession(session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setTimeout(() => applySession(s), 0);
+    import("@/integrations/supabase/client").then(({ supabase }) => {
+      if (!active) return;
+      supabase.auth.getSession().then(({ data: { session } }) => applySession(session));
+      const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+        setTimeout(() => applySession(s), 0);
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
     });
+
     return () => {
       active = false;
-      sub.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const next = window.scrollY > 20;
+      setScrolled((current) => (current === next ? current : next));
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

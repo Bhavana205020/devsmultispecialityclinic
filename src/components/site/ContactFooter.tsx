@@ -2,7 +2,7 @@ import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldC
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { externalLinkProps } from "@/lib/external-link";
 
 
