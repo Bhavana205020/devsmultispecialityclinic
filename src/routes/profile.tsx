@@ -214,8 +214,8 @@ function ProfilePage() {
               <>
               <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 pb-5 border-b border-border">
                   <div className="w-24 h-24 rounded-full overflow-hidden bg-soft border-4 border-gold/30 flex items-center justify-center shrink-0">
-                    {profile.avatar_url ? (
-                      <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                    {avatarSrc ? (
+                      <img src={avatarSrc} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <UserRound className="h-12 w-12 text-brand/40" />
                     )}
