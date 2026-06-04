@@ -1,14 +1,35 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import { externalLinkProps } from "@/lib/external-link";
 
+type SocialChannel = { id: string; platform: string; url: string };
 
 export function ContactFooter() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const [channels, setChannels] = useState<SocialChannel[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("social_channels")
+      .select("id,platform,url")
+      .eq("active", true)
+      .order("display_order")
+      .then(({ data }) => setChannels(data ?? []));
+  }, []);
+
+  const iconFor = (platform: string) => {
+    const p = platform.toLowerCase();
+    if (p.includes("insta")) return <Instagram className="h-4 w-4" />;
+    if (p.includes("face")) return <Facebook className="h-4 w-4" />;
+    if (p.includes("you")) return <Youtube className="h-4 w-4" />;
+    return <MessageCircle className="h-4 w-4" />;
+  };
+
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -119,11 +140,15 @@ export function ContactFooter() {
               A trusted multispeciality clinic in Kondapur, Hyderabad — bringing consultation, diagnostics, pharmacy, surgicals and rehabilitation under one roof.
             </p>
             <p className="text-xs opacity-75 mt-3">@devsmultispecialityclinic</p>
-            <div className="flex gap-3 mt-4">
-              <Social label="Instagram" href="#"><Instagram className="h-4 w-4" /></Social>
-              <Social label="Facebook" href="#"><Facebook className="h-4 w-4" /></Social>
-              <Social label="YouTube" href="#"><Youtube className="h-4 w-4" /></Social>
-            </div>
+            {channels.length > 0 && (
+              <div className="flex gap-3 mt-4">
+                {channels.map((c) => (
+                  <Social key={c.id} label={c.platform} href={c.url}>
+                    {iconFor(c.platform)}
+                  </Social>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick links */}
@@ -229,8 +254,8 @@ export function ContactFooter() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-xs opacity-80">
             <p>© {new Date().getFullYear()} Dev's Multispeciality Clinic — All Rights Reserved</p>
             <div className="flex gap-5">
-              <a href="#" className="hover:text-gold">Privacy Policy</a>
-              <a href="#" className="hover:text-gold">Terms of Service</a>
+              <Link to="/privacy" className="hover:text-gold">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-gold">Terms of Service</Link>
               <button onClick={() => scrollTo("home")} className="hover:text-gold inline-flex items-center gap-1">
                 Back to top <ArrowRight className="h-3 w-3 -rotate-90" />
               </button>
