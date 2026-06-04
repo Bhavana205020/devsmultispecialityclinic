@@ -140,11 +140,15 @@ export function ContactFooter() {
               A trusted multispeciality clinic in Kondapur, Hyderabad — bringing consultation, diagnostics, pharmacy, surgicals and rehabilitation under one roof.
             </p>
             <p className="text-xs opacity-75 mt-3">@devsmultispecialityclinic</p>
-            <div className="flex gap-3 mt-4">
-              <Social label="Instagram" href="#"><Instagram className="h-4 w-4" /></Social>
-              <Social label="Facebook" href="#"><Facebook className="h-4 w-4" /></Social>
-              <Social label="YouTube" href="#"><Youtube className="h-4 w-4" /></Social>
-            </div>
+            {channels.length > 0 && (
+              <div className="flex gap-3 mt-4">
+                {channels.map((c) => (
+                  <Social key={c.id} label={c.platform} href={c.url}>
+                    {iconFor(c.platform)}
+                  </Social>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick links */}
