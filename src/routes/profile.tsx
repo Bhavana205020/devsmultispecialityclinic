@@ -145,8 +145,8 @@ function ProfilePage() {
       setUploading(false);
       return toast.error(upErr.message);
     }
-    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-    setProfile((p) => ({ ...p, avatar_url: data.publicUrl }));
+    setProfile((p) => ({ ...p, avatar_url: path }));
+    await resolveAvatar(path);
     setUploading(false);
     toast.success("Photo uploaded — remember to save.");
   };
