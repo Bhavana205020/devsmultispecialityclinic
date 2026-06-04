@@ -254,8 +254,8 @@ export function ContactFooter() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-xs opacity-80">
             <p>© {new Date().getFullYear()} Dev's Multispeciality Clinic — All Rights Reserved</p>
             <div className="flex gap-5">
-              <a href="#" className="hover:text-gold">Privacy Policy</a>
-              <a href="#" className="hover:text-gold">Terms of Service</a>
+              <Link to="/privacy" className="hover:text-gold">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-gold">Terms of Service</Link>
               <button onClick={() => scrollTo("home")} className="hover:text-gold inline-flex items-center gap-1">
                 Back to top <ArrowRight className="h-3 w-3 -rotate-90" />
               </button>
