@@ -61,6 +61,18 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
+
+  const resolveAvatar = async (stored: string | null) => {
+    if (!stored) { setAvatarSrc(null); return; }
+    const path = stored.includes("/avatars/")
+      ? stored.split("/avatars/").pop()!
+      : stored;
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .createSignedUrl(path, 3600);
+    setAvatarSrc(error ? null : data?.signedUrl ?? null);
+  };
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
@@ -97,6 +109,7 @@ function ProfilePage() {
           gender: prof.gender ?? "",
           avatar_url: prof.avatar_url ?? null,
         });
+        await resolveAvatar(prof.avatar_url ?? null);
       }
 
       // Look up patient appointments by their phone (after profile loads)
@@ -132,8 +145,8 @@ function ProfilePage() {
       setUploading(false);
       return toast.error(upErr.message);
     }
-    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-    setProfile((p) => ({ ...p, avatar_url: data.publicUrl }));
+    setProfile((p) => ({ ...p, avatar_url: path }));
+    await resolveAvatar(path);
     setUploading(false);
     toast.success("Photo uploaded — remember to save.");
   };
@@ -201,8 +214,8 @@ function ProfilePage() {
               <>
               <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-6 pb-5 border-b border-border">
                   <div className="w-24 h-24 rounded-full overflow-hidden bg-soft border-4 border-gold/30 flex items-center justify-center shrink-0">
-                    {profile.avatar_url ? (
-                      <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                    {avatarSrc ? (
+                      <img src={avatarSrc} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <UserRound className="h-12 w-12 text-brand/40" />
                     )}
