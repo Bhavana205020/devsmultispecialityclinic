@@ -1,14 +1,35 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, Clock, Send, ShieldCheck, Stethoscope, HeartPulse, ArrowRight, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logo from "@/assets/logo.webp";
 import { externalLinkProps } from "@/lib/external-link";
 
+type SocialChannel = { id: string; platform: string; url: string };
 
 export function ContactFooter() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const [channels, setChannels] = useState<SocialChannel[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("social_channels")
+      .select("id,platform,url")
+      .eq("active", true)
+      .order("display_order")
+      .then(({ data }) => setChannels(data ?? []));
+  }, []);
+
+  const iconFor = (platform: string) => {
+    const p = platform.toLowerCase();
+    if (p.includes("insta")) return <Instagram className="h-4 w-4" />;
+    if (p.includes("face")) return <Facebook className="h-4 w-4" />;
+    if (p.includes("you")) return <Youtube className="h-4 w-4" />;
+    return <MessageCircle className="h-4 w-4" />;
+  };
+
 
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
