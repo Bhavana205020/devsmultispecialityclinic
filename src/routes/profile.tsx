@@ -92,14 +92,11 @@ function ProfilePage() {
       setUserId(session.user.id);
       setEmail(session.user.email ?? "");
 
-      const [{ data: prof }, { data: apptData }] = await Promise.all([
-        supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle(),
-        supabase
-          .from("appointments")
-          .select("id,department,preferred_date,status,message,created_at")
-          .eq("phone", "__never__") // placeholder; real lookup below
-          .order("created_at", { ascending: false }),
-      ]);
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
 
       if (prof) {
         setProfile({
@@ -112,17 +109,8 @@ function ProfilePage() {
         await resolveAvatar(prof.avatar_url ?? null);
       }
 
-      // Look up patient appointments by their phone (after profile loads)
-      if (prof?.phone) {
-        const { data: phoneAppts } = await supabase
-          .from("appointments")
-          .select("id,department,preferred_date,status,message,created_at")
-          .eq("phone", prof.phone)
-          .order("created_at", { ascending: false });
-        setAppts((phoneAppts as Appt[]) ?? []);
-      } else {
-        setAppts([]);
-      }
+      // Appointment history is managed by clinic staff; patients confirm status by phone/WhatsApp.
+      setAppts([]);
 
       setLoading(false);
     })();
