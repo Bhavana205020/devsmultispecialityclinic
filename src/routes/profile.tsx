@@ -61,6 +61,18 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
+
+  const resolveAvatar = async (stored: string | null) => {
+    if (!stored) { setAvatarSrc(null); return; }
+    const path = stored.includes("/avatars/")
+      ? stored.split("/avatars/").pop()!
+      : stored;
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .createSignedUrl(path, 3600);
+    setAvatarSrc(error ? null : data?.signedUrl ?? null);
+  };
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
