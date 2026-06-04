@@ -1,8 +1,31 @@
 import "@tanstack/react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { z } from "zod";
 
-type Msg = { role: "user" | "assistant" | "system"; content: string };
+const MsgSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().min(1).max(2000),
+});
+const BodySchema = z.object({
+  messages: z.array(MsgSchema).min(1).max(20),
+});
+
+// Simple in-memory IP rate limit: 20 requests / minute per IP
+const RATE_LIMIT = 20;
+const WINDOW_MS = 60_000;
+const hits = new Map<string, { count: number; resetAt: number }>();
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = hits.get(ip);
+  if (!entry || entry.resetAt < now) {
+    hits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  entry.count += 1;
+  if (entry.count > RATE_LIMIT) return true;
+  return false;
+}
 
 const CLINIC_INFO = `
 You are "Dev's Clinic Assistant" — a warm, concise AI receptionist for Dev's Multispeciality Clinic in Kondapur, Hyderabad.
@@ -38,10 +61,26 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }: { request: Request }) => {
         try {
-          const { messages } = (await request.json()) as { messages?: Msg[] };
-          if (!Array.isArray(messages) || messages.length === 0) {
-            return new Response(JSON.stringify({ error: "Messages required" }), { status: 400 });
+          const ip =
+            request.headers.get("cf-connecting-ip") ||
+            request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+            "unknown";
+          if (rateLimited(ip)) {
+            return new Response(
+              JSON.stringify({ error: "Too many requests. Please wait a moment." }),
+              { status: 429, headers: { "Content-Type": "application/json" } },
+            );
           }
+
+          const raw = await request.json().catch(() => null);
+          const parsed = BodySchema.safeParse(raw);
+          if (!parsed.success) {
+            return new Response(JSON.stringify({ error: "Invalid request" }), {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
+          const { messages } = parsed.data;
 
           const apiKey = process.env.LOVABLE_API_KEY;
           if (!apiKey) {
@@ -65,10 +104,7 @@ export const Route = createFileRoute("/api/chat")({
             /* ignore data errors, fall back to static info */
           }
 
-          const trimmed = messages.slice(-12).map((m) => ({
-            role: m.role,
-            content: String(m.content ?? "").slice(0, 2000),
-          }));
+          const trimmed = messages.slice(-12);
 
           const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
             method: "POST",
