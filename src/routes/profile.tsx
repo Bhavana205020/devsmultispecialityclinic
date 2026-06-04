@@ -109,6 +109,7 @@ function ProfilePage() {
           gender: prof.gender ?? "",
           avatar_url: prof.avatar_url ?? null,
         });
+        await resolveAvatar(prof.avatar_url ?? null);
       }
 
       // Look up patient appointments by their phone (after profile loads)
