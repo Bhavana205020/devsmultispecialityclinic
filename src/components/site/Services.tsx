@@ -64,13 +64,13 @@ export function Services() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {loading && Array.from({ length: 8 }).map((_, i) => <ServiceCardSkeleton key={i} />)}
           {!loading && services.map((s) => {
             const img = imageFor(s.name);
             return (
-              <div key={s.id} className="service-card p-6 text-center flex flex-col">
-                <div className="mx-auto h-24 w-24 flex items-center justify-center mb-4">
+              <div key={s.id} className="service-card p-3 sm:p-6 text-center flex flex-col min-w-0">
+                <div className="mx-auto h-16 w-16 sm:h-24 sm:w-24 flex items-center justify-center mb-3 sm:mb-4">
                   {img ? (
                     <img
                       src={img}
@@ -79,17 +79,17 @@ export function Services() {
                       loading="lazy"
                     />
                   ) : (
-                    <Stethoscope className="h-12 w-12 text-gold" />
+                    <Stethoscope className="h-10 w-10 sm:h-12 sm:w-12 text-gold" />
                   )}
                 </div>
-                <h3 className="text-lg font-bold text-brand mb-3">{s.name}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed flex-1">
+                <h3 className="text-sm sm:text-lg font-bold text-brand mb-2 sm:mb-3 break-words">{s.name}</h3>
+                <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed flex-1 break-words">
                   {s.description}
                 </p>
                 <Link
                   to="/blog/$slug"
                   params={{ slug: slugify(s.name) }}
-                  className="mt-4 text-xs font-semibold text-gold hover:underline self-center"
+                  className="mt-3 sm:mt-4 text-[11px] sm:text-xs font-semibold text-gold hover:underline self-center"
                 >
                   Read More →
                 </Link>
@@ -97,6 +97,7 @@ export function Services() {
             );
           })}
         </div>
+
       </div>
     </section>
   );

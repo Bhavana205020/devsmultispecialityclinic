@@ -57,15 +57,16 @@ export function Subscribe() {
         <h2 className="text-3xl md:text-4xl font-bold">Join Our Channels</h2>
         <p className="text-brand-foreground/80 mt-2">To Stay Up to Date For The Latest News</p>
 
-        <form onSubmit={submit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto bg-background rounded-full p-2 shadow-soft">
-          <div className="flex items-center gap-2 flex-1 px-4">
+        <form onSubmit={submit} className="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-2xl mx-auto bg-background rounded-2xl sm:rounded-full p-2 shadow-soft">
+          <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 min-w-0">
             <Mail className="h-4 w-4 text-brand shrink-0" />
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Your Mail" className="flex-1 bg-transparent py-3 text-sm text-foreground outline-none" />
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Your Mail" className="flex-1 min-w-0 bg-transparent py-3 text-sm text-foreground outline-none" />
           </div>
-          <button type="submit" disabled={loading} className="btn-gold rounded-full px-6 py-3 text-sm font-semibold disabled:opacity-60">
+          <button type="submit" disabled={loading} className="btn-gold rounded-xl sm:rounded-full px-6 py-3 text-sm font-semibold disabled:opacity-60 whitespace-nowrap">
             {loading ? "Subscribing..." : "Subscribe Now"}
           </button>
         </form>
+
 
         {channels.length > 0 && (
           <div className="mt-6 flex justify-center gap-3">

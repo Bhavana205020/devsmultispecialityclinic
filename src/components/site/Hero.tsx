@@ -36,13 +36,13 @@ export function Hero() {
                 health care needs, in one place
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-4 items-center">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4 pt-4 sm:items-center">
                 {/* Call Now (teal) */}
                 <a
                   href="tel:+919666205020"
-                  className="inline-flex items-center gap-3 rounded-2xl bg-brand text-brand-foreground pl-2 pr-5 py-2 shadow-soft hover:opacity-95 transition"
+                  className="inline-flex items-center gap-3 rounded-2xl bg-brand text-brand-foreground pl-2 pr-5 py-2 shadow-soft hover:opacity-95 transition w-full sm:w-auto justify-center sm:justify-start"
                 >
-                  <span className="h-10 w-10 rounded-xl bg-white/15 flex items-center justify-center">
+                  <span className="h-10 w-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
                     <Phone className="h-5 w-5 text-white" />
                   </span>
                   <span className="leading-tight text-left">
@@ -56,9 +56,9 @@ export function Hero() {
                   onClick={() =>
                     document.getElementById("appointment")?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="inline-flex items-center gap-3 rounded-2xl btn-gold pl-2 pr-5 py-2 shadow-soft"
+                  className="inline-flex items-center gap-3 rounded-2xl btn-gold pl-2 pr-5 py-2 shadow-soft w-full sm:w-auto justify-center sm:justify-start"
                 >
-                  <span className="h-10 w-10 rounded-xl bg-white/25 flex items-center justify-center">
+                  <span className="h-10 w-10 rounded-xl bg-white/25 flex items-center justify-center shrink-0">
                     <CalendarDays className="h-5 w-5 text-gold-foreground" />
                   </span>
                   <span className="leading-tight text-left">
@@ -70,14 +70,15 @@ export function Hero() {
                 {/* WhatsApp (white pill outlined) */}
                 <a
                   {...externalLinkProps("https://wa.me/919666205020?text=Hello%20Dev%27s%20Multispeciality%20Clinic")}
-                  className="inline-flex items-center gap-2 rounded-full bg-white border border-foreground/15 text-foreground px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft transition"
+                  className="inline-flex items-center gap-2 rounded-2xl sm:rounded-full bg-white border border-foreground/15 text-foreground px-5 py-3 text-sm font-semibold shadow-soft hover:bg-soft transition w-full sm:w-auto justify-center"
                 >
                   <span className="h-7 w-7 rounded-full border border-emerald-600 flex items-center justify-center">
                     <MessageCircle className="h-4 w-4 text-emerald-600" />
                   </span>
-                  Chat On What'sApp
+                  Chat On WhatsApp
                 </a>
               </div>
+
             </div>
           </div>
         </div>
