@@ -73,18 +73,25 @@ export function FloatingActions() {
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
         {/* Hint bubble */}
         {showHint && !chatOpen && (
-          <button
-            onClick={openChat}
-            className="max-w-[260px] bg-background border border-border shadow-soft rounded-2xl rounded-br-sm px-4 py-3 text-left animate-fade-in"
-          >
-            <p className="text-xs font-bold text-brand flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-gold" /> Dev's Assistant
-            </p>
-            <p className="text-xs text-foreground/80 mt-1">
-              Need help choosing a department or booking? Ask me anything!
-            </p>
-          </button>
+          <div className="relative max-w-[260px] bg-background border border-border shadow-soft rounded-2xl rounded-br-sm animate-fade-in">
+            <button
+              onClick={() => setShowHint(false)}
+              aria-label="Dismiss"
+              className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-foreground/80 hover:bg-foreground text-background flex items-center justify-center shadow-soft z-10"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+            <button onClick={openChat} className="block w-full text-left px-4 py-3">
+              <p className="text-xs font-bold text-brand flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-gold" /> Dev's Assistant
+              </p>
+              <p className="text-xs text-foreground/80 mt-1">
+                Need help choosing a department or booking? Ask me anything!
+              </p>
+            </button>
+          </div>
         )}
+
 
         {/* AI Bot */}
         <button
