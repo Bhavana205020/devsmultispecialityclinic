@@ -194,46 +194,86 @@ export function Header() {
         </div>
 
         {open && (
-          <div
-            className="md:hidden mt-2 rounded-2xl bg-background border overflow-hidden"
-            style={{
-              borderColor: "color-mix(in oklab, var(--brand) 15%, transparent)",
-              boxShadow: "0 16px 40px -20px color-mix(in oklab, var(--brand) 35%, transparent)",
-            }}
-          >
-            <div className="px-2 py-2 flex flex-col">
-              {NAV.map((n) => {
-                const active = activeSection === n.id && location.pathname === "/";
-                return (
-                  <button
-                    key={n.id}
-                    onClick={() => scrollTo(n.id)}
-                    className={`text-left px-4 py-3 rounded-xl font-medium transition-colors ${
-                      active ? "bg-brand/5 text-brand" : "text-foreground/80 hover:bg-soft"
-                    }`}
+          <>
+            {/* Backdrop */}
+            <button
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="md:hidden fixed inset-0 top-0 z-40 bg-brand/40 backdrop-blur-sm animate-fade-in"
+            />
+            {/* Sheet */}
+            <div
+              className="md:hidden fixed left-3 right-3 top-[88px] z-50 rounded-3xl bg-background overflow-hidden animate-fade-in"
+              style={{
+                border: "1px solid color-mix(in oklab, var(--brand) 15%, transparent)",
+                boxShadow: "0 24px 60px -20px color-mix(in oklab, var(--brand) 45%, transparent)",
+              }}
+            >
+              {/* Gold accent strip */}
+              <div className="h-1 w-full" style={{ background: "var(--gradient-gold)" }} />
+
+              <div className="px-3 py-3 flex flex-col">
+                {NAV.map((n) => {
+                  const active = activeSection === n.id && location.pathname === "/";
+                  return (
+                    <button
+                      key={n.id}
+                      onClick={() => scrollTo(n.id)}
+                      className={`flex items-center justify-between text-left px-4 py-3.5 rounded-2xl font-semibold transition-colors ${
+                        active
+                          ? "bg-brand/10 text-brand"
+                          : "text-foreground/85 hover:bg-soft"
+                      }`}
+                    >
+                      <span className="flex items-center gap-3">
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${active ? "bg-gold" : "bg-foreground/30"}`}
+                        />
+                        {n.label}
+                      </span>
+                      <ChevronRight className="h-4 w-4 opacity-50" />
+                    </button>
+                  );
+                })}
+
+                <div className="my-2 h-px bg-border" />
+
+                <button
+                  onClick={() => scrollTo("appointment")}
+                  className="btn-gold rounded-2xl px-5 py-3.5 text-sm font-bold mt-1 inline-flex items-center justify-center gap-2 shadow-soft"
+                >
+                  <Calendar className="h-4 w-4" /> Book Appointment
+                </button>
+
+                {signedIn ? (
+                  <Link
+                    to={admin ? "/admin" : "/profile"}
+                    onClick={() => setOpen(false)}
+                    className="mt-2 text-sm font-semibold text-brand px-4 py-3 rounded-2xl bg-brand/5 hover:bg-brand/10 inline-flex items-center gap-2 justify-center"
                   >
-                    {n.label}
-                  </button>
-                );
-              })}
-              <button
-                onClick={() => scrollTo("appointment")}
-                className="btn-gold rounded-full px-5 py-2.5 text-sm font-semibold mt-2 mx-2"
-              >
-                Book Appointment
-              </button>
-              {signedIn ? (
-                <Link to={admin ? "/admin" : "/profile"} className="text-sm font-semibold text-brand px-4 py-3">
-                  {admin ? "Admin Dashboard" : "My Profile"}
-                </Link>
-              ) : (
-                <Link to="/login" className="text-sm font-semibold text-brand px-4 py-3">
-                  Sign In / Register
-                </Link>
-              )}
+                    <UserRound className="h-4 w-4" /> {admin ? "Admin Dashboard" : "My Profile"}
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setOpen(false)}
+                    className="mt-2 text-sm font-semibold text-brand px-4 py-3 rounded-2xl bg-brand/5 hover:bg-brand/10 inline-flex items-center gap-2 justify-center"
+                  >
+                    <UserRound className="h-4 w-4" /> Sign In / Register
+                  </Link>
+                )}
+
+                <a
+                  href="tel:+919666205020"
+                  className="mt-2 text-sm font-semibold text-brand-foreground bg-brand px-4 py-3 rounded-2xl inline-flex items-center gap-2 justify-center"
+                >
+                  Call Clinic · +91 9666 20 50 20
+                </a>
+              </div>
             </div>
-          </div>
+          </>
         )}
+
       </header>
     </div>
   );
