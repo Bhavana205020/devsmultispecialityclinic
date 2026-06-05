@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { Menu, X, UserRound, ChevronRight } from "lucide-react";
+import { Menu, X, UserRound, ChevronRight, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.webp";
 import type { Session } from "@supabase/supabase-js";
