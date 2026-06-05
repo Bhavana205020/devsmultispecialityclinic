@@ -189,13 +189,7 @@ export function FloatingActions() {
         </div>
       )}
 
-      {/* Sticky Book Appointment (mobile primary) */}
-      <button
-        onClick={scrollToBooking}
-        className="fixed bottom-6 left-6 z-40 md:hidden btn-gold rounded-full px-4 py-3 text-sm font-semibold shadow-soft inline-flex items-center gap-2"
-      >
-        <Calendar className="h-4 w-4" /> Book Appointment
-      </button>
+
     </>
   );
 }
