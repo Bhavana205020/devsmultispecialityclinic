@@ -33,6 +33,13 @@ export const Route = createRootRoute({
       { title: "Dev's Multispeciality Clinic" },
       { name: "description", content: "Dev's Multispeciality Clinic — Kondapur, Hyderabad" },
       { property: "og:type", content: "website" },
+      { property: "og:title", content: "Dev's Multispeciality Clinic" },
+      { name: "twitter:title", content: "Dev's Multispeciality Clinic" },
+      { property: "og:description", content: "Dev's Multispeciality Clinic — Kondapur, Hyderabad" },
+      { name: "twitter:description", content: "Dev's Multispeciality Clinic — Kondapur, Hyderabad" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/O3hamS2kPvbMS7vndYAxjKw5kmt2/social-images/social-1780910869632-Untitled_design_(4).webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/O3hamS2kPvbMS7vndYAxjKw5kmt2/social-images/social-1780910869632-Untitled_design_(4).webp" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
