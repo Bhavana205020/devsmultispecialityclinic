@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { z } from "zod";
 import logo from "@/assets/logo.webp";
 import { externalLinkProps } from "@/lib/external-link";
 
@@ -36,9 +37,10 @@ export function ContactFooter() {
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || email.length < 5) return toast.error("Enter a valid email");
+    const parsed = z.string().trim().email("Enter a valid email").max(255).safeParse(email);
+    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
     setBusy(true);
-    const { error } = await supabase.from("subscribers").insert({ email });
+    const { error } = await supabase.from("subscribers").insert({ email: parsed.data });
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Subscribed! Thank you.");
