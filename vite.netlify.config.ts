@@ -18,6 +18,10 @@ export default defineConfig({
       autoCodeSplitting: true,
       routesDirectory: "src/routes",
       generatedRouteTree: "src/routeTree.gen.ts",
+      // Exclude server-only routes from the static SPA build.
+      // /api/chat lives on the Lovable backend and is reached via the
+      // Netlify proxy redirect in netlify.toml.
+      routeFileIgnorePattern: "(^|/)api/",
     }),
     react(),
     tsconfigPaths(),
