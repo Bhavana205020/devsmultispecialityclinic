@@ -30,6 +30,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+      // Shim Node's async_hooks so TanStack Router's Scripts/HeadContent
+      // (which transitively imports start-storage-context) can build for the browser.
+      "node:async_hooks": path.resolve(__dirname, "src/shims/async-hooks.ts"),
     },
   },
   build: {
