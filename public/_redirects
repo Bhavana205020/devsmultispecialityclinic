@@ -1,0 +1,4 @@
+# Fallback rules for hosts that read public/_redirects directly
+# (Netlify also reads this, in addition to netlify.toml).
+/api/*   https://devsmultispecialityclinic.lovable.app/api/:splat   200
+/*       /index.html                                                 200

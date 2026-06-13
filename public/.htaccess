@@ -1,0 +1,13 @@
+# Apache rewrite rules for Hostinger shared hosting (static SPA fallback).
+# Note: Hostinger shared hosting cannot proxy /api/* to the Lovable backend.
+# If you deploy to Hostinger, the AI chat assistant will not work unless you
+# point the chat fetch directly at https://devsmultispecialityclinic.lovable.app/api/chat
+# AND that endpoint allows CORS from your domain. Netlify is recommended.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

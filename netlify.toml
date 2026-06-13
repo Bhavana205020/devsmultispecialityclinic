@@ -1,0 +1,31 @@
+# Netlify deployment config for Dev's Multispeciality Clinic
+# Static Vite SPA build; AI chat endpoint is proxied to the Lovable-hosted backend
+# so the assistant keeps working without needing server functions on Netlify.
+
+[build]
+  command = "vite build --config vite.netlify.config.ts"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# 1) Proxy /api/* to the Lovable-hosted backend (AI chat lives there).
+#    `force = true` makes this win over the SPA fallback below.
+[[redirects]]
+  from = "/api/*"
+  to = "https://devsmultispecialityclinic.lovable.app/api/:splat"
+  status = 200
+  force = true
+
+# 2) SPA fallback — every other path serves index.html so TanStack Router
+#    can handle client-side routing on refresh / deep links.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Long-cache hashed assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
