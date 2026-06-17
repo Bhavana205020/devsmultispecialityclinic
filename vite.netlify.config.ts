@@ -35,6 +35,12 @@ export default defineConfig({
       "node:async_hooks": path.resolve(__dirname, "src/shims/async-hooks.ts"),
     },
   },
+  define: {
+    // Tells src/routes/__root.tsx to skip shellComponent + <Scripts/>.
+    // Without this, RouterProvider renders <html>/<body> inside <div id="root">,
+    // which causes a re-render loop on every input keystroke (Page Unresponsive).
+    __SPA_ONLY__: "true",
+  },
   build: {
     outDir: "dist",
     emptyOutDir: true,
