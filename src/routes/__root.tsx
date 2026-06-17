@@ -3,6 +3,16 @@ import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
+// Set to `true` by vite.netlify.config.ts via `define`. In the SPA build we
+// must NOT render <html>/<head>/<body>/<Scripts> because main.tsx already
+// mounts into a real <div id="root"> inside a real index.html. Rendering a
+// full document inside that div causes React to reconcile an invalid tree on
+// every state change — every keystroke in an input triggers a re-render loop
+// that locks the main thread and Chrome shows "Page Unresponsive".
+declare const __SPA_ONLY__: boolean | undefined;
+const IS_SPA_BUILD =
+  typeof __SPA_ONLY__ !== "undefined" ? __SPA_ONLY__ : false;
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -25,7 +35,7 @@ function NotFoundComponent() {
   );
 }
 
-export const Route = createRootRoute({
+const rootOptions = {
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -45,10 +55,12 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
     ],
   }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-});
+  ...(IS_SPA_BUILD ? {} : { shellComponent: RootShell }),
+} as const;
+
+export const Route = createRootRoute(rootOptions);
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
